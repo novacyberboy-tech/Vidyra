@@ -29,8 +29,6 @@ const { sendJson, sendError, readJson, serveFile, serveStatic } = require('./src
 const PORT = clampInt(process.env.PORT, 1, 65535, 8787);
 const HOST = process.env.HOST || '127.0.0.1';
 const LOOPBACK = ['127.0.0.1', 'localhost', '::1'].includes(HOST);
-let TOKEN = process.env.ACCESS_TOKEN || '';
-if (!LOOPBACK && !TOKEN) TOKEN = crypto.randomBytes(9).toString('hex');
 
 const FRAGMENT_OPTIONS = [1, 2, 4, 8, 16, 24, 32];
 let toolUpdateRunning = false;
@@ -58,12 +56,9 @@ queue.on('remove', (info) => hub.send('remove', info));
 const setNotify = (on) => notifier.setEnabled(notifyAllowed && isTermux && on);
 const commandCtx = { queue, setNotify };
 
-function authed(req, url) {
-  if (!TOKEN) return true;
-  const given = String(req.headers['x-token'] || url.searchParams.get('token') || '');
-  const a = Buffer.from(given);
-  const b = Buffer.from(TOKEN);
-  return a.length === b.length && crypto.timingSafeEqual(a, b);
+// Open access: no token is needed to use the app.
+function authed() {
+  return true;
 }
 
 /** When listening on loopback only, refuse requests whose Host header is not this machine (blocks DNS rebinding). */
@@ -93,7 +88,7 @@ function settingsPayload(tools) {
     platform: process.platform,
     isTermux,
     isWindows,
-    tokenRequired: Boolean(TOKEN),
+    tokenRequired: false,
     tools,
   };
 }
@@ -103,7 +98,7 @@ const routes = [];
 const route = (method, pattern, handler) => routes.push({ method, pattern, handler });
 
 route('GET', '/api/health', ({ res }) => sendJson(res, 200, {
-  ok: true, name: BRAND.name, version: BRAND.version, tokenRequired: Boolean(TOKEN), platform: process.platform, isTermux,
+  ok: true, name: BRAND.name, version: BRAND.version, tokenRequired: false, platform: process.platform, isTermux,
 }));
 
 route('GET', '/api/settings', async ({ res, url }) => {
@@ -391,8 +386,7 @@ if (require.main === module) {
     console.log(`  Downloads:  ${settings.downloadDir}`);
     console.log(`  yt-dlp:     ${tools.ytdlp.installed ? tools.ytdlp.version : 'NOT INSTALLED — run scripts/setup.sh'}`);
     console.log(`  ffmpeg:     ${tools.ffmpeg.installed ? tools.ffmpeg.version : 'NOT INSTALLED — merging and conversion need it'}`);
-    if (TOKEN) console.log(`  Token:      ${TOKEN}`);
-    if (!LOOPBACK) console.log('  Network mode: share the token only with people you trust.');
+    if (!LOOPBACK) console.log('  Network mode: open access, anyone who can reach this address can use it.');
     if (queue.list().some((j) => j.status === 'queued')) console.log('  Queue:      resuming unfinished downloads');
     console.log('');
   });
