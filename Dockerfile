@@ -13,7 +13,6 @@ COPY public ./public
 ENV HOST=0.0.0.0 \
     PORT=8787 \
     DOWNLOAD_DIR=/data \
-    VIDYRA_CONFIG=/data/config.json
-VOLUME /data
+    VIDYRA_CONFIG=/data/config
 EXPOSE 8787
 CMD ["node", "server.js"]
