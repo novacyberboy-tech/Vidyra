@@ -1,0 +1,19 @@
+{
+  "name": "vidyra",
+  "version": "3.4.1",
+  "private": true,
+  "description": "Vidyra — universal video & audio downloader with a professional web app, background download queue, library, player and Android notifications. Powered by yt-dlp and ffmpeg.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node cli.js",
+    "lan": "HOST=0.0.0.0 node server.js",
+    "setup": "sh scripts/setup.sh",
+    "test": "node --test --test-concurrency=1 test/unit.test.js test/server.test.js test/auth.test.js test/features.test.js test/v3.test.js test/fx.test.js test/v31.test.js test/v32.test.js test/v33.test.js",
+    "check": "node --check server.js && node --check cli.js && npm test --silent"
+  },
+  "engines": {
+    "node": ">=18.17"
+  },
+  "license": "MIT",
+  "dependencies": {}
+}

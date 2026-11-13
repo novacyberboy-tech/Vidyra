@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Vidyra logo">
+  <defs>
+    <linearGradient id="vg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#6366f1"/>
+      <stop offset="1" stop-color="#0891b2"/>
+    </linearGradient>
+    <linearGradient id="vs" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.24"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="120" fill="url(#vg)"/>
+  <rect width="512" height="250" rx="120" fill="url(#vs)"/>
+  <path d="M256 112 V292" stroke="#ffffff" stroke-width="50" stroke-linecap="round"/>
+  <path d="M168 220 L256 308 L344 220" fill="none" stroke="#ffffff" stroke-width="50" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="128" y="350" width="256" height="48" rx="24" fill="#ffffff"/>
+</svg>
